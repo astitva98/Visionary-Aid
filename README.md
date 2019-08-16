@@ -17,7 +17,7 @@ sudo apt install imagemagick
 ---OR---
 brew install imagemagick
 
-3)espeak
+3) espeak
 
 install using
 
