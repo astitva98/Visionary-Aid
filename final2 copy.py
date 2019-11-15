@@ -38,9 +38,11 @@ GPIO.setup(Trig, GPIO.OUT)
 GPIO.setup(Echo, GPIO.IN)
 i=1
 while True:
-    input_state=GPIO.input(6)
+    input_state=GPIO.input(12)
     input_state2=GPIO.input(23)
-    input_state3=GPIO.input(17)
+    input_state3=GPIO.input(13)
+    input_state4=GPIO.input(5)
+    input_state5=GPIO.input(6)
     if input_state==False:
         print('Button Pressed, waiting for 3 seconds')
         timer = threading.Timer(3.0, playMusic)
