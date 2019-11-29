@@ -20,14 +20,18 @@ GPIO.setup(12, GPIO.IN,pull_up_down=GPIO.PUD_UP)
 GPIO.setup(23, GPIO.IN,pull_up_down=GPIO.PUD_UP)
 camera=PiCamera()
 
+global flag
 flag = 1
 Trig = 18
 Echo = 24
 
 def playMusic():
-    mixer.music.load("beep-02.mp3")
-    mixer.music.play(2)
+    global flag
+    if flag==1:
+        mixer.music.load("beep-02.mp3")
+        mixer.music.play(2)
     flag = 0
+    
 
 def camer():
     GPIO.output(22, 1)
@@ -55,11 +59,18 @@ while True:
     input_state3=GPIO.input(13)
     input_state4=GPIO.input(5)
     input_state5=GPIO.input(6)
-    if input_state==False:
+    if input_state == False:
+        flag = 1
+        sleep(0.1)
         print('Button Pressed, waiting for 3 seconds')
         timer = threading.Timer(3.0, playMusic)
         timer.start()
         while(flag):
+            input_state=GPIO.input(12)
+            if input_state == False:
+                sleep(0.1)
+                print("Stopping.........")
+                flag = 0
             continue
 
         flag=1    
@@ -68,7 +79,11 @@ while True:
 
     if input_state2==False:
         mixer.music.load("ooo.mp3")
+        soun = mixer.Sound("output.wav")
+        leng = soun.get_length()
+        print(leng)
         mixer.music.play(0)
+        delta = 0
         while(mixer.music.get_busy()):
             input_state=GPIO.input(12)
             input_state2=GPIO.input(23)
@@ -86,12 +101,24 @@ while True:
                     stpa = 0
                 time.sleep(0.1)
             if input_state4 == False:
-                print("Forward")
-                mixer.music.set_pos(10)
+                print("Forward") 
+                tim = mixer.music.get_pos()
+                print(tim/1000+delta+5)
+                mixer.music.stop()
+                if tim/1000+5+delta > leng:
+                    break
+                mixer.music.play(0,tim/1000 + 5 + delta)
+                delta += tim/1000 + 5
                 time.sleep(0.1)
             if input_state5 == False:
                 print("Rewind")
-                mixer.music.set_pos(-15)
+                tim = mixer.music.get_pos()
+                print(tim/1000+delta-5)
+                mixer.music.stop()
+                if tim/1000-5+delta < 0:
+                    break
+                mixer.music.play(0,tim/1000 - 5 + delta)
+                delta += tim/1000 - 5
                 time.sleep(0.1)
         
         mixer.music.load("beep-02.mp3")

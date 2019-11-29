@@ -12,7 +12,7 @@ mixer.music.load("beep-02.mp3")
 
 GPIO.setmode(GPIO.BCM)
 
-GPIO.setup(6, GPIO.IN,pull_up_down=GPIO.PUD_UP)
+GPIO.setup(12, GPIO.IN,pull_up_down=GPIO.PUD_UP)
 GPIO.setup(17, GPIO.IN,pull_up_down=GPIO.PUD_UP)
 GPIO.setup(23, GPIO.IN,pull_up_down=GPIO.PUD_UP)
 camera=PiCamera()
@@ -22,7 +22,7 @@ Trig = 18
 Echo = 24
 
 def playMusic():
-    mixer.music.play("beep-02.mp3")
+    mixer.music.play(2)
     flag=0
 
 
@@ -38,7 +38,7 @@ GPIO.setup(Trig, GPIO.OUT)
 GPIO.setup(Echo, GPIO.IN)
 i=1
 while True:
-    input_state=GPIO.input(6)
+    input_state=GPIO.input(12)
     input_state2=GPIO.input(23)
     input_state3=GPIO.input(17)
     if input_state==False:
